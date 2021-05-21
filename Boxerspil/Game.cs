@@ -16,7 +16,10 @@ namespace Boxerspil
         private string[] m_BoxerNames =
         {
             "Mike Tyson",
-            "Bud Spencer"
+            "Bud Spencer",
+            "Rambo",
+            "RoboCop",
+            "Predator"
         };
 
         private Boxer m_PlayerBoxer;
@@ -34,14 +37,13 @@ namespace Boxerspil
             m_PlayerBoxer.Attacks.Add(new Attack("Nut crusher", 6, 20));
 
             // Initializing the NPC object.
-            string name = m_BoxerNames[new Random().Next(0, m_BoxerNames.Length)];
+            string name = CLIUI.ChooseOpponentMenu(m_BoxerNames);
             m_ComputerBoxer = new NPCBoxer(name);
         }
 
         public void Update()
         {
             Console.Clear();
-            Console.WriteLine("FIGHT!");
 
             int currentBout = 0;
             while (m_IsRunning)
@@ -51,9 +53,13 @@ namespace Boxerspil
                     UpdateBout(ref currentBout);
                 }
                 Boxer winner = GetWinner();
-                CLIUI.WinnerMenu(winner);
+                int input = CLIUI.WinnerMenu(winner);
+                switch (input)
+                {
+                    case 1: Start(); currentBout = 0; break;
+                    case 2: m_IsRunning = false; break;
+                }
             }
-            string input = Console.ReadLine();
         }
 
         /// <summary>
